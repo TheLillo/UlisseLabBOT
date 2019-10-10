@@ -3,6 +3,7 @@ from pathlib import Path
 # import time
 import socket
 import sys
+import hashlib
 
 
 # def check_or_gen_vpn(vpn_dir, temp_dir, first_name):
@@ -33,13 +34,13 @@ def check_or_gen_vpn(socket_address, vpn_dir, first_name):
         with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as client:
             client.connect(socket_address)
             first_name_as_bytes = first_name.encode('utf-8')
-            # Prima mando la dimensione da leggere in bytes
-            bit_len_first_name_as_bytes = len(first_name_as_bytes).bit_length()
-            client.send(len(first_name_as_bytes).to_bytes(bit_len_first_name_as_bytes, byteorder='big'))
-            # Poi mando il nome in bytes
-            client.send(first_name_as_bytes)
-            #Controllo che sia avvenuta la creazione
-            vpn_file = '{}{}.conf'.format(vpn_dir, str(first_name))
+            name_sha256 = hashlib.sha256()
+            name_sha256.update(first_name_as_bytes)
+            first_name_hexdigest = name_sha256.hexdigest()
+            # Mando il nome in bytes
+            client.send(first_name_hexdigest.encode('utf-8'))
+            # Controllo che sia avvenuta la creazione
+            vpn_file = '{}{}.conf'.format(vpn_dir, str(first_name_hexdigest))
             if Path(vpn_file).is_file():
                 return vpn_file
             else:
