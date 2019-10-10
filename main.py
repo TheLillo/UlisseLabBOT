@@ -13,7 +13,8 @@ if config_file.is_file():
         TOKEN = config.get('DEFAULT', 'Token')
         CHAT_ID = config.get('DEFAULT', 'Chat_Id')
         VPN_DIR = config.get('DEFAULT', 'Vpn_Dir')
-        TEMP_DIR = config.get('DEFAULT', 'Temp_Dir')
+        # TEMP_DIR = config.get('DEFAULT', 'Temp_Dir')
+        SOCKET_ADDR = config.get('DEFAULT', 'Socket_Addr')
 else:
     print("config.ini non trovato")
     exit(1)
@@ -38,7 +39,8 @@ def sendVPN(bot, update):
     if bot.getChat(chat_id=update.message.chat_id).type == 'private':
         user_state = bot.getChatMember(chat_id=CHAT_ID, user_id=update.effective_user.id).status
         if user_state == 'member' or user_state == 'creator':
-            vpn_file = check_or_gen_vpn(VPN_DIR, TEMP_DIR, update.message.chat.first_name)
+            # vpn_file = check_or_gen_vpn(VPN_DIR, TEMP_DIR, update.message.chat.first_name)
+            vpn_file = check_or_gen_vpn(SOCKET_ADDR, VPN_DIR, update.message.chat.first_name)
             if vpn_file:
                 bot.send_chat_action(chat_id=update.message.chat_id, action=ChatAction.UPLOAD_DOCUMENT)
                 bot.send_document(chat_id=update.message.chat_id, document=open(vpn_file, 'rb'), caption="Before connecting to the VPN wait 1 minutes")
