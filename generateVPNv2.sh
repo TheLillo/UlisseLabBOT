@@ -1,16 +1,32 @@
 #!/bin/sh
+USER="$(whoami)"
+GROUP="vpns"
 
-if [ "$#" -eq 0 ] && [ -z "$1" ] && [ -z "$2" ]; then
-	echo " need user and group the same of UlisseLabBOT"
-	exit
-fi
+SOCKETFILE="/tmp/socketIPC.s"
+SOCKET_DIR="$(dirname ${SOCKETFILE})"
 
-USER="$1"
-GROUP="$2"
+mkdir "${SOCKET_DIR}" || true
+chown "${USER}:${GROUP}" "${SOCKET_DIR}"
 
-(nc -Ul /tmp/socketIPC.s &) ; sleep 1 && pkill netcat ; chown "$USER":"$GROUP" /tmp/socketIPC.s
+chmod 750 "${SOCKET_DIR}"
 
-while true; do
-  USERNAME="$(nc -Ulk -w 10 /tmp/socketIPC.s)"
-  ksh $(which generate_certificate.sh) "$USERNAME"
+rm -f "${SOCKETFILE}"
+
+change_permission() {
+  # Wait for the file creation and then change the permissions.
+  while ! test -e $1 ; do
+    sleep .3
+    echo "File not found sleeping"
+  done
+
+  echo "File found, changing permission"
+  chmod 660 $1
+}
+
+change_permission "${SOCKETFILE}" &
+
+nc -klU "${SOCKETFILE}" | while read USERNAME; do
+  if echo "${USERNAME}" | egrep -q '^[a-fA-F0-9]+$'; then
+    echo "${USERNAME}"
+  fi
 done
