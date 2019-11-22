@@ -27,6 +27,6 @@ change_permission "${SOCKETFILE}" &
 
 nc -klU "${SOCKETFILE}" | while read USERNAME; do
   if echo "${USERNAME}" | egrep -q '^[a-fA-F0-9]+$'; then
-    echo "${USERNAME}"
+    ksh $(which generate_certificate.sh) "$USERNAME"
   fi
 done

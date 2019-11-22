@@ -40,12 +40,16 @@ def sendVPN(bot, update):
         user_state = bot.getChatMember(chat_id=CHAT_ID, user_id=update.effective_user.id).status
         if user_state == 'member' or user_state == 'creator':
             # vpn_file = check_or_gen_vpn(VPN_DIR, TEMP_DIR, update.message.chat.first_name)
-            vpn_file = check_or_gen_vpn(SOCKET_ADDR, VPN_DIR, update.message.chat.first_name)
-            if vpn_file:
-                bot.send_chat_action(chat_id=update.message.chat_id, action=ChatAction.UPLOAD_DOCUMENT)
-                bot.send_document(chat_id=update.message.chat_id, document=open(vpn_file, 'rb'), caption="Before connecting to the VPN wait 1 minutes")
+            current_username = update.message.chat.username
+            if current_username:
+                vpn_file = check_or_gen_vpn(SOCKET_ADDR, VPN_DIR, current_username)
+                if vpn_file:
+                    bot.send_chat_action(chat_id=update.message.chat_id, action=ChatAction.UPLOAD_DOCUMENT)
+                    bot.send_document(chat_id=update.message.chat_id, document=open(vpn_file, 'rb'), caption="Before connecting to the VPN wait 1 minutes")
+                else:
+                    bot.send_message(chat_id=update.message.chat_id, text="I'm Sorry. Something went wrong :(")
             else:
-                bot.send_message(chat_id=update.message.chat_id, text="I'm Sorry. Something went wrong :(")
+                bot.send_message(chat_id=update.message.chat_id, text="I'm Sorry. set Username :(")
         else:
             bot.send_message(chat_id=update.message.chat_id, text="I'm Sorry. This is not for you!")
     else:
