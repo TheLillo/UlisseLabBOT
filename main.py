@@ -15,6 +15,7 @@ if config_file.is_file():
         VPN_DIR = config.get('DEFAULT', 'Vpn_Dir')
         # TEMP_DIR = config.get('DEFAULT', 'Temp_Dir')
         SOCKET_ADDR = config.get('DEFAULT', 'Socket_Addr')
+        CHECKER_NEW_VPN = config.get('DEFAULT', 'Vpn_Checker')
 else:
     print("config.ini non trovato")
     exit(1)
@@ -42,7 +43,7 @@ def sendVPN(bot, update):
             # vpn_file = check_or_gen_vpn(VPN_DIR, TEMP_DIR, update.message.chat.first_name)
             current_username = update.message.chat.username
             if current_username:
-                vpn_file = check_or_gen_vpn(SOCKET_ADDR, VPN_DIR, current_username)
+                vpn_file = check_or_gen_vpn(SOCKET_ADDR, VPN_DIR, CHECKER_NEW_VPN, current_username)
                 if vpn_file:
                     bot.send_chat_action(chat_id=update.message.chat_id, action=ChatAction.UPLOAD_DOCUMENT)
                     bot.send_document(chat_id=update.message.chat_id, document=open(vpn_file, 'rb'), caption="Before connecting to the VPN wait 1 minutes")

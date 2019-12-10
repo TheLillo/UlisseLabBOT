@@ -4,7 +4,10 @@ GROUP="vpns"
 
 SOCKETFILE="/tmp/socketIPC.s"
 SOCKET_DIR="$(dirname ${SOCKETFILE})"
+VPN_DIR="/etc/openvpn/clientconfigurations/"
+CHECKER_NEW_VPN="/tmp/finish"
 
+mkdir "$FOLDER_NEW_VPN"
 mkdir "${SOCKET_DIR}" || true
 chown "${USER}:${GROUP}" "${SOCKET_DIR}"
 
@@ -28,5 +31,6 @@ change_permission "${SOCKETFILE}" &
 nc -klU "${SOCKETFILE}" | while read USERNAME; do
   if echo "${USERNAME}" | egrep -q '^[a-fA-F0-9]+$'; then
     ksh $(which generate_certificate.sh) "$USERNAME"
+    ln -s "$VPN_DIR""$USERNAME" "$FOLDER_NEW_VPN""$USERNAME"
   fi
 done

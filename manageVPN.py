@@ -4,7 +4,7 @@ from pathlib import Path
 import socket
 import sys
 import hashlib
-import time
+
 
 # def check_or_gen_vpn(vpn_dir, temp_dir, first_name):
 #     # check if vpn is present in directory else generate
@@ -29,7 +29,7 @@ import time
 #         return vpn_file
 
 
-def check_or_gen_vpn(socket_address, vpn_dir, username):
+def check_or_gen_vpn(socket_address, vpn_dir, checker_new_vpn, username):
     if Path(socket_address).exists():
         first_name_as_bytes = username.encode('utf-8')
         name_sha256 = hashlib.sha256()
@@ -44,8 +44,8 @@ def check_or_gen_vpn(socket_address, vpn_dir, username):
                 client.send(first_name_hexdigest.encode('utf-8'))
                 client.send("\n".encode('utf-8'))
                 # Controllo che sia avvenuta la creazione
-                time.sleep(2)
-                vpn_file = '{}{}.conf'.format(vpn_dir, str(first_name_hexdigest))
+                #TODO: use Pynotify to check that vpn was create
+
                 if Path(vpn_file).is_file():
                     return vpn_file
                 else:
