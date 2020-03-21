@@ -1,15 +1,15 @@
 #!/bin/sh
-USER="$(whoami)"
-GROUP="vpns"
+#USER="$(whoami)"
+#GROUP="vpns"
 
 SOCKETFILE="/tmp/socketIPC.s"
 SOCKET_DIR="$(dirname ${SOCKETFILE})"
 VPN_DIR="/etc/openvpn/clientconfigurations/"
-CHECKER_NEW_VPN="/tmp/finish"
+CHECKER_NEW_VPN="$SOCKET_DIR""/finish/"
 
-mkdir "$CHECKER_NEW_VPN"
 mkdir -p "${SOCKET_DIR}"
-chown "${USER}:${GROUP}" "${SOCKET_DIR}"
+mkdir -p "$CHECKER_NEW_VPN"
+#chown "${USER}:${GROUP}" "${SOCKET_DIR}"
 
 chmod 777 "${SOCKET_DIR}"
 
