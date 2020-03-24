@@ -17,14 +17,14 @@ if config_file.is_file():
         VPN_DIR = config.get('DEFAULT', 'Vpn_Dir')
         SOCKET_ADDR = config.get('DEFAULT', 'Socket_Addr')
         CHECKER_NEW_VPN = config.get('DEFAULT', 'Vpn_Checker')
-        PUBLIC_KEYS_FILE = config.get('DEFAULT', 'public_keys_file')
+        PUBLIC_KEYS_FILE = config.get('DEFAULT', 'Public_keys_file')
 else:
     print("config.ini non trovato")
     exit(1)
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
-regex = re.compile('^[a-zA-Z0-9=@\-\ ]+$')
+regex = re.compile('^ssh-(ed25519|rsa) AAAA[A-Za-z0-9/]+=?=?( [-a-zA-Z.@_]+)?$')
 
 
 def start(bot, update):
