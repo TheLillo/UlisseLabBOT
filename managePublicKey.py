@@ -1,5 +1,7 @@
 import yaml
 import sys
+import subprocess
+from os import path
 
 
 def add_public_key(public_keys_file, telegram_name, public_key):
@@ -21,3 +23,10 @@ def add_public_key(public_keys_file, telegram_name, public_key):
                 yaml.safe_dump(cur_yaml, f)
             except yaml.YAMLError as exc:
                 print(exc, file=sys.stderr)
+    try:
+        git_dir = path.dirname(public_keys_file)
+        subprocess.run(["git", "add", "{}".format(public_keys_file)],  cwd=git_dir, check=True)
+        subprocess.run(["git", "commit", "-m 'update players.yaml'"], cwd=git_dir, check=True)
+        subprocess.run(["git", "push"], cwd=git_dir, check=True)
+    except exc:
+        print(exc, file=sys.stderr)
