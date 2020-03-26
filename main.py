@@ -27,14 +27,6 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 regex = re.compile('^ssh-(ed25519|rsa) AAAA[A-Za-z0-9/]+=?=?( [-a-zA-Z.@_]+)?$')
 
 
-def start(bot, update):
-    keyboard = [[InlineKeyboardButton("SendVPN", callback_data='sendVPN')]]
-
-    reply_markup = InlineKeyboardMarkup(keyboard)
-
-    update.message.reply_text('Please choose:', reply_markup=reply_markup)
-
-
 def send_vpn(update, context):
     if context.bot.getChat(chat_id=update.effective_chat.id).type == 'private':
         user_state = context.bot.getChatMember(chat_id=CHAT_ID, user_id=update.effective_user.id).status
@@ -63,21 +55,20 @@ def get_public_key(update, context):
             current_username = update.message.chat.username
             if current_username:
                 public_key = " ".join(context.args)
-                if regex.fullmatch(public_key) and len(public_key) <= 1024:
-                    add_public_key(PUBLIC_KEYS_FILE, current_username, public_key)
-                    update.message.reply_text("We have add your public key. Remember only one key per user")
+                if public_key:
+                    if regex.fullmatch(public_key) and len(public_key) <= 1024:
+                        add_public_key(PUBLIC_KEYS_FILE, current_username, public_key)
+                        update.message.reply_text("We have add your public key. Remember only one key per user")
+                    else:
+                        update.message.reply_text("I'm Sorry. Your Fucking public key has some special character or is too long, only RSA and ED25519")
                 else:
-                    update.message.reply_text("I'm Sorry. Your Fucking public key has some special character or is too long")
+                    update.message.reply_text("I'm Sorry. You must write your public key string after the command")
             else:
                 update.message.reply_text("I'm Sorry. set Username :(")
         else:
             update.message.reply_text("I'm Sorry. This is not for you!")
     else:
         update.message.reply_text("I'm Sorry. This is Command is only for private chat :)")
-
-
-def help(update, context):
-    update.message.reply_text("Use /start to use this bot.")
 
 
 def main():
