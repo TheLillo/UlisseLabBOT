@@ -104,7 +104,7 @@ venv.bak/
 .mypy_cache/
 
 #ConfigFile
-config.ini
+**/config.ini
 
 #IDE metadata
 **.idea/**
