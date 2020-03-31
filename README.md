@@ -19,10 +19,6 @@ Second run the Telegram Bot as User
 The configuration is stored in **config.ini file in the same directory of the main.py, the file must be named config.ini** with the following (mandatory) attributes:
 
 ```python
-config.ini
-```
-
-```python
 [DEFAULT]
 Token = Some_Telegram_bot_Token
 Chat_Id = Chat_Id_Of_The_Group_where_you_can_take_users
