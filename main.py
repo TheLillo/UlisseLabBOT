@@ -1,5 +1,5 @@
 from telegram.ext import Updater, CommandHandler
-from telegram import ChatAction, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import ChatAction
 from pathlib import Path
 from manageVPN import check_or_gen_vpn
 from managePublicKey import add_public_key
