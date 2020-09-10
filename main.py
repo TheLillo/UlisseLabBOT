@@ -30,7 +30,7 @@ regex = re.compile('^ssh-(ed25519|rsa) AAAA[A-Za-z0-9/]+=?=?( [-a-zA-Z.@_]+)?$')
 def send_vpn(update, context):
     if context.bot.getChat(chat_id=update.effective_chat.id).type == 'private':
         user_state = context.bot.getChatMember(chat_id=CHAT_ID, user_id=update.effective_user.id).status
-        if user_state == 'member' or user_state == 'creator':
+        if user_state == 'member' or user_state == 'creator' or user_state == 'administrator':
             current_username = update.message.chat.username
             if current_username:
                 vpn_file = check_or_gen_vpn(SOCKET_ADDR, VPN_DIR, CHECKER_NEW_VPN, current_username)
