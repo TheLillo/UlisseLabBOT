@@ -8,7 +8,7 @@ future==0.18.3
 h11==0.14.0
 httpcore==0.16.3
 httpx==0.23.3
-idna==3.4
+idna==3.7
 pycparser==2.21
 python-telegram-bot==20.0
 PyYAML==6.0
