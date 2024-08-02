@@ -1,6 +1,6 @@
 anyio==3.6.2
 asn1crypto==1.5.1
-certifi==2023.7.22
+certifi==2024.7.4
 cffi==1.15.1
 cryptography==42.0.4
 decorator==5.1.1
